@@ -1,0 +1,20 @@
+pkgname=passman
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="A Simple Password Manager with AES-256 Encryption"
+arch=('x86_64')
+license=('GPLv3')
+
+build() {
+	qmake ..
+	make
+}
+
+package() {
+	mkdir -p $pkgdir/usr/bin
+	mkdir -p $pkgdir/usr/share/applications
+	mkdir -p $pkgdir/opt/aslan/icons
+	cp passman $pkgdir/usr/bin/passman
+	cp ../passman.desktop $pkgdir/usr/share/applications/passman.desktop
+	cp ../passman_icon.svg $pkgdir/opt/aslan/icons/passman_icon.svg
+}

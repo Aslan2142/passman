@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment[en_US]=
+Comment=
+Exec=/usr/bin/passman
+GenericName[en_US]=Password Manager
+GenericName=Password Manager
+Icon=/opt/aslan/icons/passman_icon
+MimeType=
+Name[en_US]=Passman
+Name=Passman
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

@@ -1,0 +1,9 @@
+Package: passman
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: arm64
+Essential: no
+Installed-Size: 132
+Maintainer: Aslan2142
+Description: A Simple Password Manager with AES-256 Encryption

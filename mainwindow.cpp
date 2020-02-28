@@ -144,7 +144,6 @@ void MainWindow::generate_password()
 
     for (QTableWidgetItem* item : selected)
     {
-        std::array<QString, 4> entry = password_manager.get_entry_copy(item->row());
         ui->tableWidgetCredentials->setItem(item->row(), 2, new QTableWidgetItem(password_manager.generate_password(password_length)));
     }
 }

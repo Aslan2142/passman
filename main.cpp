@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    QString version = "1.0.1";
+    QString version = "1.0.2";
 
     if (argc == 1)
     {

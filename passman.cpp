@@ -148,6 +148,7 @@ void passman::clear_database()
 
 std::array<QString, 4> passman::get_entry_copy(int index) const
 {
+    std::cout << decrypted_entries.size() << std::endl;
     return decrypted_entries[static_cast<ulong>(index)];
 }
 

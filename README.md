@@ -2,7 +2,9 @@
 A Simple Password Manager with AES-256 Encryption<br />
 Files **qaesencryption.cpp** and **qaesencryption.h** are from [This Repo](https://github.com/bricke/Qt-AES)
 
-Version 1.0.1
+Version 1.0.2<br />
+
+![screenshot.png](screenshot.png)
 
 
 ## Installation

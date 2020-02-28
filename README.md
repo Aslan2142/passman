@@ -1,22 +1,23 @@
 # Passman
 A Simple Password Manager with AES-256 Encryption<br />
+Files **qaesencryption.cpp** and **qaesencryption.h** are from [This Repo](https://github.com/bricke/Qt-AES)
 
-Version 1.0.0
+Version 1.0.1
 
 
 ## Installation
-Check **Releases** section
+Check **[Releases](https://github.com/Aslan2142/passman/releases)** section
 
 
 ## How To Use
 Simply Run Program and it'll launch QT GUI<br />
 
 It can also be used within CLI<br />
-Type **passman --help** for list of commands (will be available in next version (1.0.1))<br />
+Type **passman --help** for list of commands<br />
 Running **passman** without arguments will launch QT GUI
 
 
-## How To Compile
+## How To Compile and Make Package
 
 ### Debian Linux:
 Run **makedebpkg.sh** script with parameter {amd64/arm64}<br />

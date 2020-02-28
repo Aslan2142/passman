@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[])
 {
-    QString version = "1.0.0";
+    QString version = "1.0.1";
 
     if (argc == 1)
     {
@@ -24,6 +24,27 @@ int main(int argc, char *argv[])
 
     parameterparser parameter_parser(argc, argv);
     passman password_manager;
+    
+    if (parameter_parser.has_parameter("help", 'h'))
+    {
+        std::cout << "Passman v" << version.toStdString() << " - A Simple Password Manager with AES-256 Encryption by Aslan2142\n\n";
+
+        std::cout << "-h | --help | Shows this Help Screen\n";
+        std::cout << "-p <password> | --pass <password> | Input Password\n";
+        std::cout << "-d | --create-database | Creates new Database if it doesn't already exist\n";
+        std::cout << "-n <website, username, password, note> | --new <website, username, password, note> | Creates new Database Entry\n";
+        std::cout << "-r <website, username> | --remove <website, username> | Removes Database Entry\n";
+        std::cout << "-b | --backup | Makes Database Backup\n";
+        std::cout << "-a | --show-all | Shows all Database Entries\n";
+        std::cout << "-s <website> | --show <website> | Shows all Database Entries for given Website\n\n";
+
+        std::cout << "If you don't input Password using parameter, Program will expect you to enter Password after you start Passman.\n";
+        std::cout << "Database (including backups) is saved in your Documents Folder.\n";
+        std::cout << "You can restore backup by renaming it.\n";
+        std::cout << "Database can't be deleted using Passman from CLI for safety purposes, however you can delete it by removing the Database File." << std::endl;
+
+        return 0;
+    }
 
     std::string password = parameter_parser.get_value("pass", 'p');
     if (password.compare("-") == 0)
@@ -66,7 +87,46 @@ int main(int argc, char *argv[])
     {
         QStringList entry = QString::fromStdString(new_entry).split(",");
 
+        if (entry.size() != 4)
+        {
+            std::cerr << "Error Creating Database Entry (bad parameters)" << std::endl;
+            return 5;
+        }
+
         password_manager.add_entry(entry[0], entry[1], entry[2], entry[3]);
+        password_manager.encrypt();
+        password_manager.save();
+    }
+    
+    std::string remove_entry = parameter_parser.get_value("remove", 'r');
+    if (remove_entry.compare("-") != 0)
+    {
+        int index = -1;
+        QStringList input = QString::fromStdString(remove_entry).split(",");
+
+        if (input.size() != 2)
+        {
+            std::cerr << "Error Removing Database Entry (bad parameters)" << std::endl;
+            return 5;
+        }
+
+        const std::vector<std::array<QString, 4>> database = password_manager.get_database_copy();
+        for (ulong i = 0; i < database.size(); i++)
+        {
+            if (database[i][0].compare(input[0]) == 0 && database[i][1].compare(input[1]) == 0)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        if (index < 0)
+        {
+            std::cerr << "Error Removing Database Entry (entry not Found)" << std::endl;
+            return 6;
+        }
+
+        password_manager.remove_entry(index);
         password_manager.encrypt();
         password_manager.save();
     }

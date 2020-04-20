@@ -1,5 +1,5 @@
 pkgname=passman
-pkgver=1.0.2
+pkgver=1.0.3
 pkgrel=1
 pkgdesc="A Simple Password Manager with AES-256 Encryption"
 arch=('x86_64')

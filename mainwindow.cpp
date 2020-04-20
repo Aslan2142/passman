@@ -77,6 +77,8 @@ void MainWindow::decrypt_database()
 
     ui->tableWidgetCredentials->setHorizontalHeaderLabels({"Website", "Username", "Password", "Note"});
     ui->tableWidgetCredentials->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui->lineEditSearch->setFocus();
 }
 
 void MainWindow::backup_database()
@@ -128,7 +130,21 @@ void MainWindow::remove_entry()
 {
     QList<QTableWidgetItem*> selected = ui->tableWidgetCredentials->selectedItems();
 
-    saved = selected.size() <= 0;
+    if (selected.size() > 0)
+    {
+        saved = false;
+    }
+
+    int last_row = -1;
+    for (int i = 0; i < selected.size(); i++)
+    {
+        if (last_row == selected[i]->row())
+        {
+            selected.removeAt(i--);
+            continue;
+        }
+        last_row = selected[i]->row();
+    }
 
     for (QTableWidgetItem* item : selected)
     {
@@ -140,7 +156,21 @@ void MainWindow::generate_password()
 {
     QList<QTableWidgetItem*> selected = ui->tableWidgetCredentials->selectedItems();
 
-    saved = selected.size() <= 0;
+    if (selected.size() > 0)
+    {
+        saved = false;
+    }
+
+    int last_row = -1;
+    for (int i = 0; i < selected.size(); i++)
+    {
+        if (last_row == selected[i]->row())
+        {
+            selected.removeAt(i--);
+            continue;
+        }
+        last_row = selected[i]->row();
+    }
 
     for (QTableWidgetItem* item : selected)
     {
@@ -247,7 +277,17 @@ void MainWindow::on_tableWidgetCredentials_itemChanged()
 
 void MainWindow::on_tableWidgetCredentials_itemSelectionChanged()
 {
-    if (ui->tableWidgetCredentials->selectedItems().size() > 1)
+    QList<QTableWidgetItem*> selected = ui->tableWidgetCredentials->selectedItems();
+
+    int count = 0;
+    int last_row = -1;
+    for (QTableWidgetItem* item : selected)
+    {
+        if (last_row != item->row()) count++;
+        last_row = item->row();
+    }
+
+    if (count > 1)
     {
         ui->pushButtonRemoveEntry->setText("Remove Selected Entries");
     } else {

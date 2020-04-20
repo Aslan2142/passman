@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
         std::cout << "-h | --help | Shows this Help Screen\n";
         std::cout << "-p <password> | --pass <password> | Input Password\n";
         std::cout << "-d | --create-database | Creates new Database if it doesn't already exist\n";
-        std::cout << "-n <website, username, password, note> | --new <website, username, password, note> | Creates new Database Entry\n";
-        std::cout << "-r <website, username> | --remove <website, username> | Removes Database Entry\n";
+        std::cout << "-n <website,username,password,note> | --new <website,username,password,note> | Creates new Database Entry\n";
+        std::cout << "-r <website,username> | --remove <website,username> | Removes Database Entry\n";
         std::cout << "-b | --backup | Makes Database Backup\n";
         std::cout << "-a | --show-all | Shows all Database Entries\n";
         std::cout << "-s <website> | --show <website> | Shows all Database Entries for given Website\n\n";

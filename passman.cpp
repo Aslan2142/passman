@@ -2,7 +2,6 @@
 
 passman::passman() : encryption(new QAESEncryption(QAESEncryption::AES_256, QAESEncryption::CBC)) { }
 
-//Save Database to Disk
 void passman::save() const
 {
     QFile output_file(database_path);
@@ -11,7 +10,6 @@ void passman::save() const
     output_file.close();
 }
 
-//Load Database from Disk
 bool passman::load()
 {
     if (!database_exists())
@@ -27,7 +25,6 @@ bool passman::load()
     return true;
 }
 
-//Encrypt Database
 void passman::encrypt()
 {
     QByteArray data = QString("passwords\n").toLocal8Bit();
@@ -50,7 +47,6 @@ void passman::encrypt()
     encrypted_data = data;
 }
 
-//Decrypt Database
 bool passman::decrypt()
 {
     QByteArray data = encrypted_data;
@@ -96,7 +92,6 @@ bool passman::decrypt()
     return stringData.startsWith("password");
 }
 
-//Make Database Backup
 bool passman::backup() const
 {
     if (!database_exists())

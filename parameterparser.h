@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+//Help to manage the program input parameters
 class parameterparser
 {
 public:
@@ -13,7 +14,7 @@ public:
 protected:
     std::vector<std::string> arg_names;
     std::vector<std::string> arg_values;
-    void parse(int argc, char *argv[]);
+    void parse(int argc, char *argv[]); //Parse the parameters and insert values into vectors of string
 };
 
 #endif // PARAMETERPARSER_H

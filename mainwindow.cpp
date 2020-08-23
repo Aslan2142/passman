@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::decrypt_database()
 {
-    //Load and Decrypt Database
+    //Load and decrypt database
     password_manager.key = ui->lineEditEncryptionKey->text();
 
     if (!password_manager.load())
@@ -45,7 +45,7 @@ void MainWindow::decrypt_database()
     ui->labelDatabaseInfo->setText("Database Loaded");
     ui->labelEncryptionInfo->setText("Database Decrypted");
 
-    //Fill up the Table
+    //Fill up the table
     std::vector<std::array<QString, 4>> database = password_manager.get_database_copy();
 
     ui->tableWidgetCredentials->clear();
@@ -62,7 +62,7 @@ void MainWindow::decrypt_database()
 
     saved = true;
 
-    //Enable/Disable UI Elements
+    //Enable/Disable UI elements
     ui->pushButtonUnlock->setEnabled(false);
     ui->lineEditEncryptionKey->setEnabled(false);
 
@@ -75,6 +75,7 @@ void MainWindow::decrypt_database()
     ui->lineEditSearch->setEnabled(true);
     ui->tableWidgetCredentials->setEnabled(true);
 
+    //Set UI collumn names
     ui->tableWidgetCredentials->setHorizontalHeaderLabels({"Website", "Username", "Password", "Note"});
     ui->tableWidgetCredentials->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
@@ -83,6 +84,7 @@ void MainWindow::decrypt_database()
 
 void MainWindow::backup_database()
 {
+    //Backup the database if it exists
     if (password_manager.backup())
     {
         ui->labelDatabaseInfo->setText("Database Backup Complete");
@@ -93,18 +95,22 @@ void MainWindow::backup_database()
 
 void MainWindow::save_database()
 {
+    //Clear old database data
     password_manager.clear_database();
 
     std::array<QString, 4> tmp_row;
     for (int i = 0; i < ui->tableWidgetCredentials->rowCount(); i++)
     {
+        //Get the data from the row
         for (int j = 0; j < 4; j++)
         {
             tmp_row[static_cast<ulong>(j)] = ui->tableWidgetCredentials->item(i, j)->text();
         }
+        //Add the row data to the database
         password_manager.add_entry(tmp_row[0], tmp_row[1], tmp_row[2], tmp_row[3]);
     }
 
+    //Encrypt and save the database onto a drive
     password_manager.encrypt();
     password_manager.save();
 
@@ -115,12 +121,13 @@ void MainWindow::add_entry()
 {
     int row_count = ui->tableWidgetCredentials->rowCount();
 
+    //Add the entry to the end of the database and scroll to the row
     ui->tableWidgetCredentials->insertRow(row_count);
     ui->tableWidgetCredentials->scrollToItem(ui->tableWidgetCredentials->takeItem(row_count, 0));
 
     ui->tableWidgetCredentials->setItem(row_count, 0, new QTableWidgetItem(""));
     ui->tableWidgetCredentials->setItem(row_count, 1, new QTableWidgetItem(""));
-    ui->tableWidgetCredentials->setItem(row_count, 2, new QTableWidgetItem(password_manager.generate_password(password_length)));
+    ui->tableWidgetCredentials->setItem(row_count, 2, new QTableWidgetItem(password_manager.generate_password(password_length))); //Add generated password
     ui->tableWidgetCredentials->setItem(row_count, 3, new QTableWidgetItem(""));
 
     saved = false;
@@ -128,6 +135,7 @@ void MainWindow::add_entry()
 
 void MainWindow::remove_entry()
 {
+    //Get a list of selected database entries
     QList<QTableWidgetItem*> selected = ui->tableWidgetCredentials->selectedItems();
 
     if (selected.size() > 0)
@@ -135,6 +143,7 @@ void MainWindow::remove_entry()
         saved = false;
     }
 
+    //Get rid of item duplicates caused by multiple collumns
     int last_row = -1;
     for (int i = 0; i < selected.size(); i++)
     {
@@ -146,6 +155,7 @@ void MainWindow::remove_entry()
         last_row = selected[i]->row();
     }
 
+    //Remove all selected rows
     for (QTableWidgetItem* item : selected)
     {
         ui->tableWidgetCredentials->removeRow(item->row());
@@ -154,6 +164,7 @@ void MainWindow::remove_entry()
 
 void MainWindow::generate_password()
 {
+    //Get a list of selected database entries
     QList<QTableWidgetItem*> selected = ui->tableWidgetCredentials->selectedItems();
 
     if (selected.size() > 0)
@@ -161,6 +172,7 @@ void MainWindow::generate_password()
         saved = false;
     }
 
+    //Get rid of item duplicates caused by multiple collumns
     int last_row = -1;
     for (int i = 0; i < selected.size(); i++)
     {
@@ -172,6 +184,7 @@ void MainWindow::generate_password()
         last_row = selected[i]->row();
     }
 
+    //Generate new password for all selected rows
     for (QTableWidgetItem* item : selected)
     {
         ui->tableWidgetCredentials->setItem(item->row(), 2, new QTableWidgetItem(password_manager.generate_password(password_length)));
@@ -204,6 +217,7 @@ void MainWindow::search(const QString &input)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    //Close the program if the newest database is saved, if not show a dialog
     if (saved)
     {
         event->accept();
@@ -236,17 +250,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::check_database()
 {
-
     if (password_manager.database_exists())
     {
         return;
     }
 
+    //Show new database dialog
     QInputDialog input_dialog;
     input_dialog.resize(400, 200);
     input_dialog.setWindowTitle("Database not Found");
     input_dialog.setLabelText("Enter Password for your new Database:");
 
+    //Close the dialog
     if (input_dialog.exec() == 0)
     {
         close();
@@ -262,6 +277,7 @@ void MainWindow::check_database()
         password_manager.save();
     }
 
+    //Recheck to see if a new database has been created
     check_database();
 }
 
@@ -272,21 +288,24 @@ void MainWindow::on_spinBoxPasswordLength_valueChanged(int arg1)
 
 void MainWindow::on_tableWidgetCredentials_itemChanged()
 {
-    saved = false;
+    saved = false; //Set save indicator to false if database entry has been changed
 }
 
 void MainWindow::on_tableWidgetCredentials_itemSelectionChanged()
 {
+    //Get a list of selected database entries
     QList<QTableWidgetItem*> selected = ui->tableWidgetCredentials->selectedItems();
 
     int count = 0;
     int last_row = -1;
+    //Count the number of entries
     for (QTableWidgetItem* item : selected)
     {
-        if (last_row != item->row()) count++;
+        if (last_row != item->row()) count++; //Count only rows(entries) and not the collumns
         last_row = item->row();
     }
 
+    //Set the remove entry button text according to number of selected entries
     if (count > 1)
     {
         ui->pushButtonRemoveEntry->setText("Remove Selected Entries");

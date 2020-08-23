@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     QString version = "1.0.3";
 
+    //Run GUI if no arguments are passed
     if (argc == 1)
     {
         QApplication a(argc, argv);
@@ -25,6 +26,7 @@ int main(int argc, char *argv[])
     parameterparser parameter_parser(argc, argv);
     passman password_manager;
     
+    //Print help ccreen
     if (parameter_parser.has_parameter("help", 'h'))
     {
         std::cout << "Passman v" << version.toStdString() << " - A Simple Password Manager with AES-256 Encryption by Aslan2142\n\n";
@@ -46,6 +48,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    //Load password from an argument (if present)
     std::string password = parameter_parser.get_value("pass", 'p');
     if (password.compare("-") == 0)
     {
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
     }
     password_manager.key = QString::fromStdString(password);
 
+    //Create database
     if (parameter_parser.has_parameter("create-database", 'd'))
     {
         if (password_manager.database_exists())
@@ -71,6 +75,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    //Print main errors (if occured)
     if (!password_manager.load())
     {
         std::cerr << "Error Loading Database" << std::endl;
@@ -82,6 +87,7 @@ int main(int argc, char *argv[])
         return 2;
     }
 
+    //Create new entry
     std::string new_entry = parameter_parser.get_value("new", 'n');
     if (new_entry.compare("-") != 0)
     {
@@ -98,6 +104,7 @@ int main(int argc, char *argv[])
         password_manager.save();
     }
     
+    //Remove an entry
     std::string remove_entry = parameter_parser.get_value("remove", 'r');
     if (remove_entry.compare("-") != 0)
     {
@@ -131,11 +138,13 @@ int main(int argc, char *argv[])
         password_manager.save();
     }
 
+    //Backup database
     if (parameter_parser.has_parameter("backup", 'b'))
     {
         password_manager.backup();
     }
 
+    //Show all entries
     if (parameter_parser.has_parameter("show-all", 'a'))
     {
         const std::vector<std::array<QString, 4>> database = password_manager.get_database_copy();
@@ -145,6 +154,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    //Search and show entries by website
     std::string show_website = parameter_parser.get_value("show", 's');
     if (show_website.compare("-") != 0)
     {

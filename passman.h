@@ -16,26 +16,26 @@ class passman
 public:
     passman();
     QString database_path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/credentials.database";
-    QString key = "";
-    void save() const;
-    bool load();
-    void encrypt();
-    bool decrypt();
-    bool backup() const;
-    void add_entry(QString website_name, QString username, QString password, QString note);
-    void remove_entry(int index);
-    void alter_entry(int index, QString new_website_name, QString new_username, QString new_password, QString new_note);
-    void clear_database();
-    std::array<QString, 4> get_entry_copy(int index) const;
-    std::vector<std::array<QString, 4>> get_database_copy() const;
-    QString generate_password(int length) const;
-    bool database_exists() const;
+    QString key = ""; //Database encryption key
+    void save() const; //Save the database to the database path on drive
+    bool load(); //Loads the database from the database path on a drive
+    void encrypt(); //Encrypts database entries into encrypted data
+    bool decrypt(); //Decrypts encrypted database data into database entries
+    bool backup() const; //Backups the database in a backup location on a drive and returns false if there is not a database to backup
+    void add_entry(QString website_name, QString username, QString password, QString note); //Add new entry to database
+    void remove_entry(int index); //Return entry from a database
+    void alter_entry(int index, QString new_website_name, QString new_username, QString new_password, QString new_note); //Alter database entry
+    void clear_database(); //Removes everything from the database
+    std::array<QString, 4> get_entry_copy(int index) const; //Returns entry copy from the database
+    std::vector<std::array<QString, 4>> get_database_copy() const; //Returns full database copy
+    QString generate_password(int length) const; //Returns newly generated password string
+    bool database_exists() const; //Returns true if database exists on a drive in certain location
 
 protected:
-    QAESEncryption *encryption;
+    QAESEncryption *encryption; //Pointer to an object used for encryption
     QByteArray encrypted_data; //Encrypted Database
     std::vector<std::array<QString, 4>> decrypted_entries; //Database Entries
-    QString characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:;.,/=-+*<>{}()[]_%#$@!?^&";
+    QString characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:;.,/=-+*<>{}()[]_%#$@!?^&"; //List of characters for password generator
     QStringList ivs = {
         "jW2jT]%0k2#-2R1.d(7'6V0Z|4=-HX2G9@F;561.07@21,NHq42)*896M(18R+9w080*Hs^,45G?;]5R7}'*0Z67?Y7|%SFI**0g",
         ")OR2*711+M)*a,5D/qB}/#]|fN*30oA<#;>]B80>,4J9@<<;J5;#wL*]p$G9D0i1860;Y<I*.)0diN/yi*08;^hJ596]2NY9&+#l",
@@ -47,7 +47,7 @@ protected:
         "72|/3;10O@!(|t)]8}02Gf126N)+6*w6e2P57/dWd*JW5+aR?h31e/=4o5<H@Uzu2<;71Qd63B{k9-PQ_41[5yA'e^?2A27$[8-7",
         "H(6>8!$l9!4?6_,7L%4}z3Lu8;sb^q}9%lVy6I57L]8<,-ho?310Dd_h|y1#iz%3]rN'zr5T1Bc2uQ5cb!K39386)50c0+%.w.X'",
         "2-n$rL3v4T/*/22F%2tN}.yDX78#50z3Z9-B10X5*4]97+R-OK'2^F%7$>95c8jLu531C==1|V7Cd=o;5L6/B17jF2C9<1]R4'DY",
-    };
+    }; //List of initialization vectors for aes encryption/decryption
 };
 
 #endif // PASSMAN_H

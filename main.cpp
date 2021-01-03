@@ -50,8 +50,10 @@ int main(int argc, char *argv[])
 
     //Load password from an argument (if present)
     std::string password = parameter_parser.get_value("pass", 'p');
+    //Wait for password input in case it wasn't present in the argument
     if (password.compare("-") == 0)
     {
+        std::cout << "Input Pasword: ";
         std::cin >> password;
     }
     password_manager.key = QString::fromStdString(password);
